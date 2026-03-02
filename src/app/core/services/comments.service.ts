@@ -9,6 +9,11 @@ import { Comment } from '../models/comment.model';
 export class CommentsService {
   private readonly http = inject(HttpClient);
 
+  /**
+   * Get comments by post
+   * @param postId Post id
+   * @returns Comments under post
+   */
   getCommentsByPost(postId: number): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${environment.apiUrl}/posts/${postId}/comments`);
   }

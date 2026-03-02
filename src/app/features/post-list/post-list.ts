@@ -63,7 +63,7 @@ export class PostList implements OnInit {
         map((posts: Post[]) =>
           posts.map((p) => ({
             ...p,
-            authorName: this.userChache.get(p.user_id) ?? 'Neznamt autor',
+            authorName: this.userChache.get(p.user_id) ?? 'Neznamy autor',
           })),
         ),
       )

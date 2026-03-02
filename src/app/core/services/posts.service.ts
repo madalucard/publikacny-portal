@@ -14,7 +14,7 @@ export class PostsService {
 
   /**
    * Get Posts
-   * @param page
+   * @param page Page number
    * @param userId Post bz user
    * @returns Posts
    */
