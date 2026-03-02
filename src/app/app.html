@@ -1,34 +1,24 @@
 <div class="app-layout d-flex flex-column vh-100">
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-primary shadow-sm flex-shrink-0">
+  <nav class="app-navbar navbar flex-shrink-0">
     <div class="container-fluid">
-      <span class="navbar-brand fw-bold">
+      <span class="navbar-brand">
         <i class="bi bi-journal-richtext me-2"></i>Publikačný portál
       </span>
     </div>
   </nav>
 
-  <!-- Main layout: side-by-side na desktope, mobile alternuje -->
   <main class="flex-grow-1 overflow-hidden">
     <div class="layout-grid h-100" [class.has-selection]="selectedPost()">
-      <!-- Post List – skrytý na mobile ak je vybraný článok -->
       <div class="list-pane" [class.d-none]="selectedPost()" [class.d-md-block]="selectedPost()">
         <app-post-list [selectedPost]="selectedPost()" (postSelected)="onPostSelected($event)" />
       </div>
-
-      <!-- Post Detail – na mobile zaberie celú šírku keď je vybraný -->
       <div
         class="detail-pane"
         [class.d-none]="!selectedPost()"
         [class.d-md-block]="!selectedPost()"
       >
-        @if (!selectedPost()) {
-          <!-- Na desktope zobraz placeholder keď nič nie je vybraté -->
-        }
         <app-post-detail [post]="selectedPost()" />
       </div>
     </div>
   </main>
 </div>
-
-<router-outlet />

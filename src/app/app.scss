@@ -1,14 +1,33 @@
 .app-layout {
   overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.app-navbar {
+  background: var(--bg-header) !important;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  padding: 0.75rem 1.5rem;
+
+  .navbar-brand {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+    color: var(--text-primary) !important;
+
+    i {
+      color: var(--accent);
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+  }
 }
 
 .layout-grid {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
 
   @media (min-width: 768px) {
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 360px 1fr;
 
     .list-pane,
     .detail-pane {

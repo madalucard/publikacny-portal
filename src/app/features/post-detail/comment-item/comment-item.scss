@@ -1,6 +1,37 @@
-.avatar-circle {
+.comment-item {
+  border-bottom: 1px solid var(--border);
+  animation: fadeIn 0.3s ease;
+}
+.avatar {
   width: 36px;
   height: 36px;
-  font-size: 0.85rem;
   min-width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+.comment-name {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+.comment-email {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.comment-body {
+  font-size: 0.83rem;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
