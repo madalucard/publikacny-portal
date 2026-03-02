@@ -1,0 +1,17 @@
+.post-list-panel {
+  background: var(--bs-body-bg);
+  border-right: 1px solid var(--bs-border-color);
+}
+
+.post-list-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-border-color) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
+    border-radius: 3px;
+  }
+}

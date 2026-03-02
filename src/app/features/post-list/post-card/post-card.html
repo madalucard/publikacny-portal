@@ -1,0 +1,23 @@
+<div
+  class="card post-card h-100"
+  [class.seleted]="selected()"
+  (click)="select()"
+  (keydown.enter)="select()"
+  (keydown.space)="select()"
+  tabindex="0"
+  role="button"
+  [attr.aria-pressed]="selected()"
+>
+  <div class="card-body">
+    <h5 class="card-title">{{ post().title }}</h5>
+    <p class="card-text text-muted small">
+      <i class="bi bi-person me-1"></i>{{ post().authorName }}
+    </p>
+    <p class="card-text">{{ post().body | truncate }}</p>
+  </div>
+  <div class="card-footer text-end">
+    <span class="badge bg-primary-subtle text-primary-emphasis">
+      <i class="bi bi-chat-dots me-1"></i>Čítať ďalej
+    </span>
+  </div>
+</div>

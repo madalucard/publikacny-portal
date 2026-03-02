@@ -1,0 +1,42 @@
+<aside class="post-list-panel h-100 d-flex flex-column">
+  <div class="p-3 border-bottom">
+    <h2 class="h5 mb-3"><i class="bi bi-newspaper me-2 text-primary"></i>Články</h2>
+    <app-author-filter
+      [selectedUserId]="selectedUserId()"
+      (userSelected)="onUserSelected($event)"
+    />
+  </div>
+
+  <div class="post-list-scroll flex-grow-1 overflow-auto p-3">
+    @if (loading()) {
+      <app-loading-spinner />
+    } @else if (posts().length === 0) {
+      <div class="text-center text-muted py-5">
+        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+        Žiadne články nenájdené
+      </div>
+    } @else {
+      <div class="d-flex flex-column gap-3">
+        @for (post of posts(); track post.id) {
+          <app-post-card
+            [post]="post"
+            [selected]="selectedPost()?.id === post.id"
+            (postSelected)="onPostSelected($event)"
+          />
+        }
+      </div>
+
+      @if (loadingMore()) {
+        <app-loading-spinner />
+      }
+
+      @if (hasMore() && !loadingMore()) {
+        <app-infinite-scroll-trigger (triggered)="onScrollTriggered()" />
+      }
+
+      @if (!hasMore() && posts().length > 0) {
+        <p class="text-center text-muted small mt-3 py-2">— Všetky články načítané —</p>
+      }
+    }
+  </div>
+</aside>

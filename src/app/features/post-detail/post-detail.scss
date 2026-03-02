@@ -1,0 +1,16 @@
+.post-detail-panel {
+  background: var(--bs-body-bg);
+}
+
+.post-header {
+  background: var(--bs-primary-bg-subtle);
+}
+
+.comments-section {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-border-color) transparent;
+}
+
+.empty-state {
+  opacity: 0.6;
+}

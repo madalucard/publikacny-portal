@@ -1,0 +1,15 @@
+<div class="comment-item d-flex gap-3 py-3 border-bottom">
+  <div
+    class="avatar-circle flex-shrink-0 d-flex align-items-center justify-content-center rounded-circle text-white fw-bold"
+    [style.background-color]="getColor(comment().email)"
+  >
+    {{ comment().name.charAt(0).toUpperCase() }}
+  </div>
+  <div class="flex-grow-1">
+    <div class="d-flex justify-content-between align-items-start mb-1">
+      <strong class="small">{{ comment().name }}</strong>
+      <span class="text-muted small">{{ comment().email }}</span>
+    </div>
+    <p class="mb-0 small">{{ comment().body }}</p>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="mb-4">
+  <label for="authorFilter" class="form-label fw-semibold">
+    <i class="bi bi-person-fill me-1"></i>Filtrovať podľa autora
+  </label>
+  <select
+    id="authorFilter"
+    class="form-select"
+    [value]="selectedUserId() ?? ''"
+    (change)="onFilterChange($event)"
+    [disabled]="loading()"
+  >
+    <option value="">— Všetci autori —</option>
+    @for (user of users(); track user.id) {
+      <option [value]="user.id">{{ user.name }}</option>
+    }
+  </select>
+  @if (loading()) {
+    <div class="form-text text-muted">Načítavam autorov...</div>
+  }
+</div>
