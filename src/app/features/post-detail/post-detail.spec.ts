@@ -20,4 +20,20 @@ describe('PostsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should call correct URL with page param', () => {
+    service.getPosts(2).subscribe();
+
+    const req = httpMock.expectOne((r) => r.params.get('page') === '2');
+    expect(req.request.url).toContain('/posts');
+    req.flush([]);
+  });
+
+  it('should include user_id param when filtering by author', () => {
+    service.getPosts(1, 42).subscribe();
+
+    const req = httpMock.expectOne((r) => r.params.get('user_id') === '42');
+    expect(req).toBeTruthy();
+    req.flush([]);
+  });
 });
