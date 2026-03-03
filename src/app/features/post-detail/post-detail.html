@@ -1,33 +1,32 @@
-<article class="post-detail-panel h-100 d-flex flex-column">
+<article class="post-detail-panel">
   @if (post(); as currentPost) {
-    <header class="post-header p-4 border-bottom">
-      <h1 class="h3 mb-2">{{ currentPost.title }}</h1>
-      <p class="text-muted mb-0">
-        <i class="bi bi-person-circle me-1"></i>
-        <strong>{{ currentPost.authorName }}</strong>
-      </p>
+    <header class="post-header">
+      <h1>{{ currentPost.title }}</h1>
+      <span class="author-chip">
+        <i class="bi bi-person-circle"></i>{{ currentPost.authorName }}
+      </span>
     </header>
 
-    <div class="post-content p-4 border-bottom">
-      <p class="lead">{{ currentPost.body }}</p>
+    <div class="post-body">
+      <p>{{ currentPost.body }}</p>
     </div>
 
-    <section class="comments-section flex-grow-1 overflow-auto p-4">
-      <h3 class="h5 mb-3">
-        <i class="bi bi-chat-square-dots me-2 text-primary"></i>
+    <section class="comments-section">
+      <div class="comments-heading">
+        <i class="bi bi-chat-dots"></i>
         Komentáre
         @if (comments().length > 0) {
-          <span class="badge bg-secondary ms-1">{{ comments().length }}</span>
+          <span class="badge">{{ comments().length }}</span>
         }
-      </h3>
+      </div>
 
       @if (loadingComments()) {
         <app-loading-spinner />
       } @else if (comments().length === 0) {
-        <p class="text-muted text-center py-4">
-          <i class="bi bi-chat-slash fs-2 d-block mb-2"></i>
-          Žiadne komentáre
-        </p>
+        <div class="empty-state">
+          <i class="bi bi-chat-slash"></i>
+          <p>Žiadne komentáre</p>
+        </div>
       } @else {
         @for (comment of comments(); track comment.id) {
           <app-comment-item [comment]="comment" />
@@ -35,12 +34,10 @@
       }
     </section>
   } @else {
-    <div
-      class="empty-state h-100 d-flex flex-column align-items-center justify-content-center text-muted"
-    >
+    <div class="empty-state h-100 d-flex flex-column align-items-center justify-content-center">
       <i class="bi bi-file-earmark-text fs-1 mb-3"></i>
       <p class="h6">Vyberte článok zo zoznamu</p>
-      <p class="small">Kliknite na ľubovoľný článok vľavo</p>
+      <p>Kliknite na ľubovoľný článok vľavo</p>
     </div>
   }
 </article>
