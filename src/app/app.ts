@@ -12,7 +12,7 @@ import { PostDetail } from './features/post-detail/post-detail';
 })
 export class App {
   readonly selectedPost = signal<PostWithAuthor | null>(null);
-  readonly useMock = signal(true);
+  readonly useMock = signal(false);
 
   onPostSelected(post: PostWithAuthor): void {
     this.selectedPost.set(post);
