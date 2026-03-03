@@ -4,21 +4,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --bg-primary: #0d0f1a;
-  --bg-card: #161929;
-  --bg-card-hover: #1c2038;
-  --bg-header: #0a0c15;
-  --accent: #818cf8;
-  --accent-glow: rgba(129, 140, 248, 0.25);
-  --text-primary: #f1f5f9;
-  --text-muted: #94a3b8;
-  --border: #2e3354;
+  --bg-primary: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2128;
+  --bg-header: #010409;
+  --accent: #2f81f7;
+  --accent-glow: rgba(47, 129, 247, 0.2);
+  --text-primary: #e6edf3;
+  --text-muted: #7d8590;
+  --border: #30363d;
   --font-display: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 body {
@@ -28,22 +24,38 @@ body {
   overflow: hidden;
 }
 
-// Zvýš kontrast všetkých textov
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  color: #f1f5f9 !important;
+  color: #e6edf3 !important;
 }
-
 p,
-span,
-label {
-  color: #cbd5e1;
+span {
+  color: #e6edf3;
+}
+.text-muted {
+  color: #7d8590 !important;
 }
 
-.text-muted {
-  color: #94a3b8 !important;
+.app-navbar {
+  background: #010409 !important;
+  border-bottom: 1px solid #30363d !important;
+}
+
+.form-select {
+  background-color: #161b22 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+
+  &:focus {
+    border-color: #2f81f7 !important;
+    box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.2) !important;
+  }
+
+  option {
+    background: #161b22;
+  }
 }
