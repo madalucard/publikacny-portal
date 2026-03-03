@@ -14,6 +14,7 @@ import { CommentItem } from './comment-item/comment-item';
 })
 export class PostDetail {
   readonly post = input<PostWithAuthor | null>(null);
+  readonly useMock = input<boolean>(true);
 
   readonly comments = signal<Comment[]>([]);
   readonly loadingComments = signal(false);
@@ -23,16 +24,18 @@ export class PostDetail {
   constructor() {
     effect(() => {
       const currentPost = this.post();
+      const mock = this.useMock();
       if (currentPost) {
-        this.loadComments(currentPost.id);
+        this.loadComments(currentPost.id, mock);
       } else {
         this.comments.set([]);
       }
     });
   }
 
-  loadComments(postId: number) {
-    this.commentsService.getCommentsByPost(postId).subscribe({
+  loadComments(postId: number, useMock = false): void {
+    this.loadingComments.set(true);
+    this.commentsService.getCommentsByPost(postId, useMock).subscribe({
       next: (comments) => {
         this.comments.set(comments);
         this.loadingComments.set(false);

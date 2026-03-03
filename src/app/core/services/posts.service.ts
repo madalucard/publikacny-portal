@@ -1,47 +1,35 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { delay, map, Observable, of } from 'rxjs';
 
 import { environment } from '../../../environment/environment';
 import { Post, PostsPage } from '../models/post.model';
+import { MOCK_POSTS } from '../mock/mock-data';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class PostsService {
   private readonly httpClient = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/posts`;
 
-  /**
-   * Get Posts
-   * @param page Page number
-   * @param userId Post bz user
-   * @returns Posts
-   */
-  getPosts(page: number, userId?: number): Observable<PostsPage> {
-    let params = new HttpParams().set('page', page).set('perPage', environment.pageSize);
-    if (userId) {
-      params = params.set('user_id', userId);
+  getPosts(page: number, userId?: number, useMock = false): Observable<PostsPage> {
+    if (useMock) {
+      const filtered = userId ? MOCK_POSTS.filter((p) => p.user_id === userId) : MOCK_POSTS;
+      return of({ posts: filtered, meta: { pages: 1 } }).pipe(delay(400));
     }
+
+    let params = new HttpParams().set('page', page).set('per_page', environment.pageSize);
+    if (userId) params = params.set('user_id', userId);
 
     return this.httpClient.get<Post[]>(this.baseUrl, { params, observe: 'response' }).pipe(
       map((response) => ({
         posts: response.body ?? [],
         meta: {
-          total: parseInt(response.headers.get('x-pagination-total') ?? '0', 10),
           pages: parseInt(response.headers.get('x-pagination-pages') ?? '1', 10),
-          page: parseInt(response.headers.get('x-pagination-page') ?? '1', 10),
-          limit: parseInt(response.headers.get('x-pagination-limit') ?? '10', 10),
         },
       })),
     );
   }
 
-  /**
-   * Get post by Id
-   * @param id Requested post Id
-   * @returns Post
-   */
   getPostById(id: number): Observable<Post> {
     return this.httpClient.get<Post>(`${this.baseUrl}/${id}`);
   }

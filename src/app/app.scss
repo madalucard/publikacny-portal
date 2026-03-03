@@ -41,3 +41,29 @@
   height: 100%;
   overflow: hidden;
 }
+
+.mock-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  background: #161b22;
+  color: #7d8590;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #2f81f7;
+    color: #e6edf3;
+  }
+
+  &.mock-active {
+    border-color: #2f81f7;
+    color: #2f81f7;
+    background: rgba(47, 129, 247, 0.1);
+  }
+}

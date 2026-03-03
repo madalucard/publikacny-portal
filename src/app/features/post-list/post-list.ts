@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import { Post, PostWithAuthor } from '../../core/models/post.model';
 import { PostsService } from '../../core/services/posts.service';
 import { UsersService } from '../../core/services/users.service';
@@ -15,8 +15,9 @@ import { InfiniteScrollTrigger } from '../../shared/components/infinite-scroll-t
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss',
 })
-export class PostList implements OnInit {
+export class PostList {
   readonly selectedPost = input<PostWithAuthor | null>(null);
+  readonly useMock = input<boolean>(true);
   readonly postSelected = output<PostWithAuthor>();
 
   private readonly postsService = inject(PostsService);
@@ -29,33 +30,64 @@ export class PostList implements OnInit {
 
   private currentPage = 1;
   private totalPages = 1;
-  private userChache = new Map<number, string>();
+  private userCache = new Map<number, string>();
 
   readonly hasMore = computed(() => this.currentPage < this.totalPages);
 
-  ngOnInit(): void {
-    this.loadPosts(true);
+  private initialized = false;
+
+  constructor() {
+    effect(() => {
+      const mock = this.useMock();
+      if (!this.initialized) {
+        this.initialized = true;
+        this.loadPosts(true, mock);
+        return;
+      }
+      this.posts.set([]);
+      this.currentPage = 1;
+      this.totalPages = 1;
+      this.userCache.clear();
+      this.selectedUserId.set(null);
+      this.loadPosts(true, mock);
+    });
   }
 
-  private loadPosts(initial: boolean): void {
+  private loadPosts(initial: boolean, useMock = this.useMock()): void {
     initial ? this.loading.set(true) : this.loadingMore.set(true);
 
+    if (useMock) {
+      this.postsService
+        .getPosts(this.currentPage, this.selectedUserId() ?? undefined, true)
+        .subscribe({
+          next: ({ posts, meta }) => {
+            this.totalPages = meta.pages;
+            this.posts.update((prev) => [...prev, ...(posts as PostWithAuthor[])]);
+            this.loading.set(false);
+            this.loadingMore.set(false);
+          },
+          error: () => {
+            this.loading.set(false);
+            this.loadingMore.set(false);
+          },
+        });
+      return;
+    }
+
     this.postsService
-      .getPosts(this.currentPage, this.selectedUserId() ?? undefined)
+      .getPosts(this.currentPage, this.selectedUserId() ?? undefined, false)
       .pipe(
         switchMap(({ posts, meta }) => {
           this.totalPages = meta.pages;
           const uniqUserIds = [
-            ...new Set(posts.map((p) => p.user_id).filter((id) => !this.userChache.has(id))),
+            ...new Set(posts.map((p) => p.user_id).filter((id) => !this.userCache.has(id))),
           ];
 
-          if (uniqUserIds.length === 0) {
-            return of(posts);
-          }
+          if (uniqUserIds.length === 0) return of(posts);
 
           return forkJoin(uniqUserIds.map((id) => this.usersService.getUsersById(id))).pipe(
             map((users: User[]) => {
-              users.forEach((u) => this.userChache.set(u.id, u.name));
+              users.forEach((u) => this.userCache.set(u.id, u.name));
               return posts;
             }),
           );
@@ -63,13 +95,13 @@ export class PostList implements OnInit {
         map((posts: Post[]) =>
           posts.map((p) => ({
             ...p,
-            authorName: this.userChache.get(p.user_id) ?? 'Neznamy autor',
+            authorName: this.userCache.get(p.user_id) ?? 'Neznámy autor',
           })),
         ),
       )
       .subscribe({
-        next: (enrihedPosts) => {
-          this.posts.update((prev) => [...prev, ...enrihedPosts]);
+        next: (enrichedPosts) => {
+          this.posts.update((prev) => [...prev, ...enrichedPosts]);
           this.loading.set(false);
           this.loadingMore.set(false);
         },
@@ -80,15 +112,12 @@ export class PostList implements OnInit {
       });
   }
 
-  reset() {
+  onUserSelected(userId: number | null): void {
     this.posts.set([]);
     this.currentPage = 1;
     this.totalPages = 1;
-  }
-
-  onUserSelected(userId: number | null) {
+    this.userCache.clear();
     this.selectedUserId.set(userId);
-    this.reset();
     this.loadPosts(true);
   }
 
@@ -96,9 +125,9 @@ export class PostList implements OnInit {
     this.postSelected.emit(post);
   }
 
-  onScrollTriggered() {
+  onScrollTriggered(): void {
     if (!this.loading() && !this.loadingMore() && this.hasMore()) {
-      this.currentPage;
+      this.currentPage++;
       this.loadPosts(false);
     }
   }

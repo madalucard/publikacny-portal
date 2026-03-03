@@ -4,20 +4,30 @@
       <span class="navbar-brand">
         <i class="bi bi-journal-richtext me-2"></i>Publikačný portál
       </span>
+
+      <button class="mock-btn" (click)="toggleMock()" [class.mock-active]="useMock()">
+        <i class="bi" [class.bi-database]="!useMock()" [class.bi-database-fill]="useMock()"></i>
+        {{ useMock() ? 'Mock' : 'Live API' }}
+      </button>
     </div>
   </nav>
 
   <main class="flex-grow-1 overflow-hidden">
-    <div class="layout-grid h-100" [class.has-selection]="selectedPost()">
+    <div class="layout-grid h-100">
       <div class="list-pane" [class.d-none]="selectedPost()" [class.d-md-block]="selectedPost()">
-        <app-post-list [selectedPost]="selectedPost()" (postSelected)="onPostSelected($event)" />
+        <app-post-list
+          [selectedPost]="selectedPost()"
+          [useMock]="useMock()"
+          (postSelected)="onPostSelected($event)"
+        />
       </div>
+
       <div
         class="detail-pane"
         [class.d-none]="!selectedPost()"
         [class.d-md-block]="!selectedPost()"
       >
-        <app-post-detail [post]="selectedPost()" />
+        <app-post-detail [post]="selectedPost()" [useMock]="useMock()" />
       </div>
     </div>
   </main>
